@@ -244,7 +244,8 @@ popd
 
 %if 0%{!?ffmpegsuffix:1}
 %files
-%doc COPYING.* CREDITS README doc/ffserver.conf
+%license COPYING.*
+%doc CREDITS README.md doc/ffserver.conf
 %{_bindir}/ffmpeg
 %{_bindir}/ffplay
 %{_bindir}/ffprobe
