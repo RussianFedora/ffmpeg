@@ -5,7 +5,6 @@
 #global rel     rc1
 
 %if 0%{?rhel}
-%global _without_celt     1
 %global _without_frei0r   1
 %global _without_opencv   1
 %global _without_vpx      1
@@ -28,7 +27,6 @@ Source0:        http://ffmpeg.org/releases/ffmpeg-%{version}.tar.bz2
 %endif
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
 BuildRequires:  bzip2-devel
-%{!?_without_celt:BuildRequires: celt-devel}
 %{?_with_dirac:BuildRequires: dirac-devel}
 %{?_with_faac:BuildRequires: faac-devel}
 BuildRequires:  freetype-devel
@@ -118,7 +116,6 @@ This package contains development files for %{name}
     --enable-gnutls \\\
     --enable-libass \\\
     %{!?_without_cdio:--enable-libcdio} \\\
-    %{!?_without_celt:--enable-libcelt} \\\
     --enable-libdc1394 \\\
     %{?_with_dirac:--enable-libdirac} \\\
     %{?_with_faac:--enable-libfaac --enable-nonfree} \\\
@@ -284,6 +281,7 @@ popd
 %changelog
 * Mon May 04 2015 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 2.6.2-1
 - Updated to 2.6.2
+- Drop celt support, it's dropped in Fedora
 
 * Fri May 01 2015 Julian Sikorski <belegdol@fedoraproject.org> - 2.1.8-1
 - Updated to 2.1.8
