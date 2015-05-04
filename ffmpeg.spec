@@ -158,7 +158,7 @@ echo "git-snapshot-%{?branch}%{date}-RPMFusion" > VERSION
 %setup -q -n ffmpeg-%{version}
 %endif
 # fix -O3 -g in host_cflags
-sed -i "s/-O3 -g/$RPM_OPT_FLAGS/" configure
+sed -i "s|-O3 -g|%{optflags}|" configure
 
 %build
 mkdir generic
