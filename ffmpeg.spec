@@ -269,7 +269,7 @@ install -pm755 tools/qt-faststart $RPM_BUILD_ROOT%{_bindir}
 
 
 %changelog
-* Thu Jan 14 2015 Arkady L. Shane <ashejn@russianfedora.pro> - 2.8.4-1.R
+* Thu Jan 14 2016 Arkady L. Shane <ashejn@russianfedora.pro> - 2.8.4-1.R
 - fix hls protocols vulnerability
   (http://habrahabr.ru/company/mailru/blog/274855/)
 
