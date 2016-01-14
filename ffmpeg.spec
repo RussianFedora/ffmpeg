@@ -12,8 +12,8 @@
 
 Summary:        Digital VCR and streaming server
 Name:           ffmpeg
-Version:        2.6.2
-Release:        2%{?date}%{?date:git}%{?rel}%{?dist}
+Version:        2.8.4
+Release:        1%{?date}%{?date:git}%{?rel}%{?dist}
 %if 0%{?_with_amr:1}
 License:        GPLv3+
 %else
@@ -23,12 +23,18 @@ URL:            http://ffmpeg.org/
 %if 0%{?date}
 Source0:        ffmpeg-%{?branch}%{date}.tar.bz2
 %else
-Source0:        http://ffmpeg.org/releases/ffmpeg-%{version}.tar.bz2
+Source0:        http://ffmpeg.org/releases/ffmpeg-%{version}.tar.xz
 %endif
+
+# fix http://habrahabr.ru/company/mailru/blog/274855/
+Patch0:         ffmpeg-hls-protocols.patch
+
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
 BuildRequires:  bzip2-devel
+%{?_with_celt:BuildRequires: celt-devel}
 %{?_with_dirac:BuildRequires: dirac-devel}
 %{?_with_faac:BuildRequires: faac-devel}
+%{?_with_fdk_aac:BuildRequires: fdk-aac-devel}
 BuildRequires:  freetype-devel
 %{!?_without_frei0r:BuildRequires: frei0r-devel}
 BuildRequires:  gnutls-devel
@@ -54,7 +60,7 @@ BuildRequires:  libXvMC-devel
 %endif
 %{?_with_amr:BuildRequires: opencore-amr-devel vo-amrwbenc-devel}
 %{!?_without_openal:BuildRequires: openal-soft-devel}
-%{!?_without_opencl:BuildRequires: opencl-headers ocl-icd-devel}
+%{?_with_opencl:BuildRequires: opencl-headers ocl-icd-devel}
 %{!?_without_opencv:BuildRequires: opencv-devel}
 BuildRequires:  openjpeg-devel
 BuildRequires:  opus-devel
@@ -130,15 +136,18 @@ This package contains development files for %{name}
     %{!?_without_ladspa:--enable-ladspa} \\\
     --enable-libass \\\
     %{!?_without_cdio:--enable-libcdio} \\\
+    %{?_with_celt:--enable-libcelt} \\\
     --enable-libdc1394 \\\
     %{?_with_dirac:--enable-libdirac} \\\
     %{?_with_faac:--enable-libfaac --enable-nonfree} \\\
+    %{?_with_fdk-aac:--enable-libfdk-aac --enable-nonfree} \\\
     %{!?_with_jack:--disable-indev=jack} \\\
     --enable-libfreetype \\\
     --enable-libgsm \\\
     --enable-libmp3lame \\\
+    %{?_with_nvenc:--enable-nvenc  --enable-nonfree} \\\
     %{!?_without_openal:--enable-openal} \\\
-    %{!?_without_opencl:--enable-opencl} \\\
+    %{?_with_opencl:--enable-opencl} \\\
     %{!?_without_opencv:--enable-libopencv} \\\
     --enable-libopenjpeg \\\
     --enable-libopus \\\
@@ -173,6 +182,9 @@ echo "git-snapshot-%{?branch}%{date}-RPMFusion" > VERSION
 %else
 %setup -q -n ffmpeg-%{version}
 %endif
+
+%patch0 -p1 -b .hls-protocols
+
 # fix -O3 -g in host_cflags
 sed -i "s|-O3 -g|$RPM_OPT_FLAGS|" configure
 
@@ -250,18 +262,45 @@ install -pm755 tools/qt-faststart $RPM_BUILD_ROOT%{_bindir}
 
 %files devel
 %doc MAINTAINERS doc/APIchanges doc/*.txt
+%doc %{_docdir}/ffmpeg/*.html
 %{_includedir}/ffmpeg
 %{_libdir}/pkgconfig/lib*.pc
 %{_libdir}/lib*.so
 
 
 %changelog
-* Thu May 07 2015 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 2.6.2-2
-- Rebase to latest rpmfusion ffmpeg without loosing update to 2.6.2
+* Thu Jan 14 2015 Arkady L. Shane <ashejn@russianfedora.pro> - 2.8.4-1.R
+- fix hls protocols vulnerability
+  (http://habrahabr.ru/company/mailru/blog/274855/)
 
-* Mon May 04 2015 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 2.6.2-1
+* Wed Dec 23 2015 Julian Sikorski <belegdol@fedoraproject.org> - 2.8.4-1
+- Updated to 2.8.4
+- Fixed Fraunhofer FDK AAC conditional build (RF # 3898)
+
+* Sun Nov 29 2015 Julian Sikorski <belegdol@fedoraproject.org> - 2.8.3-1
+- Updated to 2.8.3
+
+* Sat Nov 14 2015 Nicolas Chauvet <kwizart@gmail.com> - 2.8.2-1
+- Update to 2.8.2
+
+* Sat Oct 24 2015 Nicolas Chauvet <kwizart@gmail.com> - 2.8.1-1
+- Update to 2.8.1
+
+* Sat Jul 25 2015 Julian Sikorski <belegdol@fedoraproject.org> - 2.6.4-1
+- Updated to 2.6.4
+
+* Wed May 27 2015 Julian Sikorski <belegdol@fedoraproject.org> - 2.6.3-1
+- Updated to 2.6.3
+
+* Sat May 16 2015 Nicolas Chauvet <kwizart@gmail.com> - 2.6.2-3
+- Rebuilt for x265
+
+* Mon May 11 2015 Nicolas Chauvet <kwizart@gmail.com> - 2.6.2-2
+- Disable opencl by default - rfbz#3640
+- Add with condition for nvenc,fdk_aac
+
+* Tue May 05 2015 Julian Sikorski <belegdol@fedoraproject.org> - 2.6.2-1
 - Updated to 2.6.2
-- Drop celt support, it's dropped in Fedora
 
 * Tue Apr 28 2015 Julian Sikorski <belegdol@fedoraproject.org> - 2.4.9-1
 - Updated to 2.4.9
