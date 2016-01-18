@@ -12,7 +12,7 @@
 
 Summary:        Digital VCR and streaming server
 Name:           ffmpeg
-Version:        2.8.4
+Version:        2.8.5
 Release:        1%{?date}%{?date:git}%{?rel}%{?dist}
 %if 0%{?_with_amr:1}
 License:        GPLv3+
@@ -25,10 +25,6 @@ Source0:        ffmpeg-%{?branch}%{date}.tar.bz2
 %else
 Source0:        http://ffmpeg.org/releases/ffmpeg-%{version}.tar.xz
 %endif
-
-# fix http://habrahabr.ru/company/mailru/blog/274855/
-Patch0:         ffmpeg-hls-protocols.patch
-
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
 BuildRequires:  bzip2-devel
 %{?_with_celt:BuildRequires: celt-devel}
@@ -182,9 +178,6 @@ echo "git-snapshot-%{?branch}%{date}-RPMFusion" > VERSION
 %else
 %setup -q -n ffmpeg-%{version}
 %endif
-
-%patch0 -p1 -b .hls-protocols
-
 # fix -O3 -g in host_cflags
 sed -i "s|-O3 -g|$RPM_OPT_FLAGS|" configure
 
@@ -269,9 +262,8 @@ install -pm755 tools/qt-faststart $RPM_BUILD_ROOT%{_bindir}
 
 
 %changelog
-* Thu Jan 14 2016 Arkady L. Shane <ashejn@russianfedora.pro> - 2.8.4-1.R
-- fix hls protocols vulnerability
-  (http://habrahabr.ru/company/mailru/blog/274855/)
+* Sat Jan 16 2016 Julian Sikorski <belegdol@fedoraproject.org> - 2.8.5-1.R
+- Updated to 2.8.5
 
 * Wed Dec 23 2015 Julian Sikorski <belegdol@fedoraproject.org> - 2.8.4-1
 - Updated to 2.8.4
