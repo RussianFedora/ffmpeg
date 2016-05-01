@@ -6,14 +6,14 @@
 
 %if 0%{?rhel}
 %global _without_frei0r   1
-%global _without_opencv   1
+%global _without_opencv   0
 %global _without_vpx      1
 %endif
 
 Summary:        Digital VCR and streaming server
 Name:           ffmpeg
 Version:        2.8.6
-Release:        2%{?date}%{?date:git}%{?rel}%{?dist}
+Release:        3%{?date}%{?date:git}%{?rel}%{?dist}
 %if 0%{?_with_amr:1}
 License:        GPLv3+
 %else
@@ -262,6 +262,9 @@ install -pm755 tools/qt-faststart $RPM_BUILD_ROOT%{_bindir}
 
 
 %changelog
+* Sun May  1 2016 Arkady L. Shane <ashejn@russianfedora.pro> - 2.8.6-3.R
+- disable opencv
+
 * Thu Apr 28 2016 Vasiliy N. Glazov <vascom2@gmail.com> - 2.8.6-2.R
 - Rebuild for new opencv
 
