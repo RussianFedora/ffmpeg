@@ -6,7 +6,6 @@
 
 %if 0%{?rhel}
 %global _without_frei0r   1
-%global _without_opencv   0
 %global _without_vpx      1
 %endif
 
@@ -57,7 +56,6 @@ BuildRequires:  libXvMC-devel
 %{?_with_amr:BuildRequires: opencore-amr-devel vo-amrwbenc-devel}
 %{!?_without_openal:BuildRequires: openal-soft-devel}
 %{?_with_opencl:BuildRequires: opencl-headers ocl-icd-devel}
-%{!?_without_opencv:BuildRequires: opencv-devel}
 BuildRequires:  openjpeg-devel
 BuildRequires:  opus-devel
 %{!?_without_pulse:BuildRequires: pulseaudio-libs-devel}
@@ -144,7 +142,6 @@ This package contains development files for %{name}
     %{?_with_nvenc:--enable-nvenc  --enable-nonfree} \\\
     %{!?_without_openal:--enable-openal} \\\
     %{?_with_opencl:--enable-opencl} \\\
-    %{!?_without_opencv:--enable-libopencv} \\\
     --enable-libopenjpeg \\\
     --enable-libopus \\\
     %{!?_without_pulse:--enable-libpulse} \\\
