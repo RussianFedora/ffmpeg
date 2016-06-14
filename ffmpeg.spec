@@ -10,6 +10,10 @@
 %global _without_vpx      1
 %endif
 
+%if 0%{?fedora} > 24
+%global _without_opencv   0
+%endif
+
 Summary:        Digital VCR and streaming server
 Name:           ffmpeg
 Version:        3.0.2
