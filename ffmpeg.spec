@@ -6,13 +6,14 @@
 
 %if 0%{?rhel}
 %global _without_frei0r   1
+%global _without_opencv   1
 %global _without_vpx      1
 %endif
 
 Summary:        Digital VCR and streaming server
 Name:           ffmpeg
-Version:        2.8.7
-Release:        1%{?date}%{?date:git}%{?rel}%{?dist}
+Version:        3.0.2
+Release:        0.9%{?date}%{?date:git}%{?rel}%{?dist}
 %if 0%{?_with_amr:1}
 License:        GPLv3+
 %else
@@ -56,6 +57,7 @@ BuildRequires:  libXvMC-devel
 %{?_with_amr:BuildRequires: opencore-amr-devel vo-amrwbenc-devel}
 %{!?_without_openal:BuildRequires: openal-soft-devel}
 %{?_with_opencl:BuildRequires: opencl-headers ocl-icd-devel}
+%{!?_without_opencv:BuildRequires: opencv-devel}
 BuildRequires:  openjpeg-devel
 BuildRequires:  opus-devel
 %{!?_without_pulse:BuildRequires: pulseaudio-libs-devel}
@@ -142,6 +144,7 @@ This package contains development files for %{name}
     %{?_with_nvenc:--enable-nvenc  --enable-nonfree} \\\
     %{!?_without_openal:--enable-openal} \\\
     %{?_with_opencl:--enable-opencl} \\\
+    %{!?_without_opencv:--enable-libopencv} \\\
     --enable-libopenjpeg \\\
     --enable-libopus \\\
     %{!?_without_pulse:--enable-libpulse} \\\
@@ -259,19 +262,16 @@ install -pm755 tools/qt-faststart $RPM_BUILD_ROOT%{_bindir}
 
 
 %changelog
-* Thu May 12 2016 Arkady L. Shane <ashejn@russianfedora.pro> - 2.8.7-1.R
-- update to 2.8.7
+* Sat May 14 2016 Michael Kuhn <suraia@ikkoku.de> - 3.0.2-0.9.R
+- Update to 3.0.2.
 
-* Sun May  1 2016 Arkady L. Shane <ashejn@russianfedora.pro> - 2.8.6-3.R
-- disable opencv
+* Mon May 02 2016 Julian Sikorski <belegdol@fedoraproject.org> - 2.8.7-1
+- Updated to 2.8.7
 
-* Thu Apr 28 2016 Vasiliy N. Glazov <vascom2@gmail.com> - 2.8.6-2.R
-- Rebuild for new opencv
+* Mon Feb 01 2016 Julian Sikorski <belegdol@fedoraproject.org> - 2.8.6-1
+- Updated to 2.8.6
 
-* Tue Feb 16 2016 Arkady L. Shane <ashejn@russiafedora.pro> - 2.8.6-1.R
-- rebuilt for rawhide
-
-* Sat Jan 16 2016 Julian Sikorski <belegdol@fedoraproject.org> - 2.8.5-1.R
+* Sat Jan 16 2016 Julian Sikorski <belegdol@fedoraproject.org> - 2.8.5-1
 - Updated to 2.8.5
 
 * Wed Dec 23 2015 Julian Sikorski <belegdol@fedoraproject.org> - 2.8.4-1
